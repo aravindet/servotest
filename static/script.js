@@ -1,12 +1,20 @@
 import Linkage from './linkage.js';
 
+// Printed model v2
 const linkage = new Linkage({
-  motorAlpha: 45,
+  motorAlpha: 60,
   motorBeta: 9,
-  motorZero: 90, //86.17,
+  motorZero: 90,
   innerLink: 51.265,
   outerLink: 68.735,
 });
+
+// Mechanical advantage (servo turn degrees per degree change in elevation / azimuth):
+// min = 0.72, avg = 2.56, consistency = 30%
+
+// Currenly found optimum:
+// alpha: 57°, beta: 7°, inner: 50.1513°, outer: 56.8487°
+// Mechanical advantage: min = 0.81, avg = 2.56, consistency = 31.7%
 
 document.addEventListener('DOMContentLoaded', () => {
   // Get elements

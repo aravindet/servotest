@@ -86,7 +86,7 @@ export default class Linkage {
       //   });
 
       const E = Math.acos(Math.max(Math.min(cosE, 1), -1)) * side * -1;
-      console.log('side ', fmt(T), fmt(E));
+      // console.log('side ', fmt(T), fmt(E));
       // const E = Math.acos(cosE);
 
       // Motor rotation angle is the sum of the two.

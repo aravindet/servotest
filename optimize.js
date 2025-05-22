@@ -5,7 +5,7 @@ import Linkage from './static/linkage.js';
 // find the best one
 
 const MAX_THETA = Math.PI / 4;
-const THETA_MARGIN = Math.PI / 36;
+const THETA_MARGIN = Math.PI / 72;
 
 const rad = (deg) => (deg * Math.PI) / 180;
 const deg = (rad) => (rad * 180) / Math.PI;
@@ -55,7 +55,7 @@ function getLinkLengths(alpha, beta) {
 
 // Variables to test
 const ALPHAS = [45, 90, 1];
-const BETAS = [9, 75, 1];
+const BETAS = [0, 90, 1];
 
 const THETAS = [45];
 // const PHIS = [0, 15, 30, 45, 60, 90, 105, 120, 135, 150, 165, 180];
