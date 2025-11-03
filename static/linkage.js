@@ -18,6 +18,9 @@ export default class Linkage {
     this.motorZero = rad(geometry.motorZero);
     this.innerLink = rad(geometry.innerLink);
     this.outerLink = rad(geometry.outerLink);
+
+    this.offsets = [0, 0];
+    this.offsets = this.ik(0, 0);
   }
 
   ik(thetaDeg, phiDeg) {
@@ -93,7 +96,7 @@ export default class Linkage {
       return T + E + side * motorZero;
     };
 
-    return [deg(ikMotor(+1)), deg(ikMotor(-1))];
+    return [deg(ikMotor(+1)) - this.offsets[0], deg(ikMotor(-1)) - this.offsets[1]];
   }
 }
 

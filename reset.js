@@ -31,44 +31,25 @@ const moveTo = (pin, deg) => {
 	// +60° → 1500 + 600 = 2100
 	const pw = 1500 + deg * 10;
 	console.log('M', deg, pw);
-
-	const freq = 250; // Hertz
-    const dutyCycle = pw * freq;
-
-	return pin.hardwarePWM(freq, dutyCycle);
+	return pin.setServoPulsewidth(pw);
 }
 
-const pins = [];
+// const pins = [];
 
 const init = async (info) => {
 	console.log(info);
 
-	const xpin = rpi.gpio(12);
-	pins.push(xpin);
+	for (const no of [12, 13]) {
+	    const xpin = rpi.gpio(no);
+    	await xpin.modeSet('output');
+        const freq = 250; // Hertz
+        const pulseWidth = 1500; // µs
+        const dutyCycle = pulseWidth * freq;
+        xpin.hardwarePWM(freq, dutyCycle);
+	}
 
-	await xpin.modeSet('output');
-
-	let deg = 0;
-	let delta = 10;
-	const min = -60;
-	const max = 60;
-
-	let steps = 100;
-
-	do {
-		await moveTo(xpin, deg);
-		await wait(500);
-		deg += delta;
-		if (deg < min || deg > max) {
-			delta = -delta;
-			deg += 2*delta;
-		}
-		steps--
-	} while (steps > 0);
-
-	await moveTo(xpin, 0);
-
-	process.exit(0);
+    await wait(1000);
+    process.exit();
 };
 
 const rpi = pigpio({ host: '192.168.0.173' });
@@ -76,14 +57,9 @@ rpi.once('connected', init);
 rpi.on('error', (err) => { console.error(err); });
 rpi.on('disconnected', (reason) => { console.log('pigpio:disconnected', reason); });
 
-process.on('exit', () => {
-	console.log('Exiting');
-	for (const pin of pins) {
-		pin.hardwarePWM(0);
-	}
-});
-
-process.on('SIGINT', () => {
-    console.log('sigint');
-    process.exit(0);
-});
+// process.on('exit', () => {
+// 	console.log('Exiting');
+// 	for (const pin of pins) {
+// 		pin.write(0);
+// 	}
+// });

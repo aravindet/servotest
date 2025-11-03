@@ -3,18 +3,20 @@ import Linkage from './linkage.js';
 // Printed model v2
 const linkage = new Linkage({
   motorAlpha: 60,
-  motorBeta: 9,
+  motorBeta: 12,
   motorZero: 90,
-  innerLink: 51.265,
-  outerLink: 68.735,
+  innerLink: 48.208,
+  outerLink: 59.292,
 });
 
 // Mechanical advantage (servo turn degrees per degree change in elevation / azimuth):
 // min = 0.72, avg = 2.56, consistency = 30%
+// servo range = 121.33°, zero: 86.17°
 
 // Currenly found optimum:
 // alpha: 57°, beta: 7°, inner: 50.1513°, outer: 56.8487°
 // Mechanical advantage: min = 0.81, avg = 2.56, consistency = 31.7%
+// servo range = 121
 
 document.addEventListener('DOMContentLoaded', () => {
   // Get elements
@@ -90,10 +92,6 @@ document.addEventListener('DOMContentLoaded', () => {
     pin12Value.textContent = `${angle}°`;
     const pulseWidth = calculatePulseWidth(angle);
     pin12PW.textContent = pulseWidth;
-  });
-
-  pin12Slider.addEventListener('change', function () {
-    const angle = Number.parseInt(this.value);
     debouncedControlServo(12, angle);
   });
 
@@ -103,10 +101,6 @@ document.addEventListener('DOMContentLoaded', () => {
     pin13Value.textContent = `${angle}°`;
     const pulseWidth = calculatePulseWidth(angle);
     pin13PW.textContent = pulseWidth;
-  });
-
-  pin13Slider.addEventListener('change', function () {
-    const angle = Number.parseInt(this.value);
     debouncedControlServo(13, angle);
   });
 
@@ -145,8 +139,12 @@ document.addEventListener('DOMContentLoaded', () => {
       try {
         const [out1, out2] = linkage.ik(inclination, azimuth);
         coordinatesDisplay.textContent = fmt`inclination = ${inclination}°, azimuth = ${azimuth}°, motor_positions: (${out1}, ${out2})`;
-        controlServo(12, out1);
-        controlServo(13, out2);
+        pin12Slider.value = out1;
+        pin13Slider.value = out2;
+        pin12Slider.dispatchEvent(new InputEvent('input'));
+        pin13Slider.dispatchEvent(new InputEvent('input'));
+        // controlServo(12, out1);
+        // controlServo(13, out2);
       } catch (e) {
         coordinatesDisplay.textContent = fmt`inclination = ${inclination}°, azimuth = ${azimuth}°, error: ${e.message}`;
       }
